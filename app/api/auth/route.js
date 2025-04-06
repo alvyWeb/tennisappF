@@ -4,6 +4,13 @@ import { cert, getApps, initializeApp } from "firebase-admin/app";
 
 // Initialize Admin only once
 if (!getApps().length) {
+
+    const privateKey = process.env.FIREBASE_PRIVATE_KEY;
+
+    if (!privateKey) {
+    throw new Error("Missing FIREBASE_PRIVATE_KEY in environment variables");
+    }
+    
   initializeApp({
     credential: cert({
       projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
