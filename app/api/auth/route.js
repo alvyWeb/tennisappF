@@ -7,6 +7,8 @@ if (!getApps().length) {
 
     const privateKey = process.env.FIREBASE_PRIVATE_KEY;
 
+    console.log("PRIVATE KEY EXISTS:", !!process.env.FIREBASE_PRIVATE_KEY);
+
     if (!privateKey) {
     throw new Error("Missing FIREBASE_PRIVATE_KEY in environment variables");
     }
