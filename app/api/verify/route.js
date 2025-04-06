@@ -2,11 +2,11 @@ import { NextResponse } from "next/server";
 import { getAuth } from "firebase-admin/auth";
 import { cert, getApps, initializeApp } from "firebase-admin/app";
 
-const privateKey = process.env.FIREBASE_PRIVATE_KEY;
+// const privateKey = process.env.FIREBASE_PRIVATE_KEY;
 
-if (!privateKey) {
-    throw new Error("Missing FIREBASE_PRIVATE_KEY in environment variables");
-}
+// if (!privateKey) {
+//     throw new Error("Missing FIREBASE_PRIVATE_KEY in environment variables");
+// }
 
 // Initialize Admin only once
 if (!getApps().length) {
