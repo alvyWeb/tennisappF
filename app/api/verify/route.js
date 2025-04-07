@@ -26,23 +26,24 @@ const db = getFirestore();
 // API route to update and fetch data
 export async function POST(req) {
   const body = await req.json();
-  const { token, imageUrl, name, age, gender, country } = body;
+  const { token, fileInputCover, fileInputProfile,  fullName, nickName, birthday, strongHand, backhand, country, city } = body;
 
   try {
-    // Verify token to ensure the user is authenticated
     const decodedToken = await auth.verifyIdToken(token);
     const uid = decodedToken.uid;
 
-    // Set the user's document reference in Firestore
+    // Update or create a user document in Firestore
     const userRef = doc(db, "users", uid);
-
-    // Update or create a new user document
     await setDoc(userRef, {
-      imageUrl: imageUrl || "",  // URL of the user's image
-      name: name || "",          // User's name
-      age: age || "",            // User's age
-      gender: gender || "",      // User's gender
-      country: country || "",    // User's country
+      coverImage: fileInputCover || "",
+      profileImage: fileInputProfile || "",
+      name: fullName || "",
+      nickName: nickName || "",
+      birthday: birthday || "",
+      strongHand: strongHand || "",
+      backHand: backhand || "",
+      country: country || "",
+      city: city || "",
     }, { merge: true });
 
     return NextResponse.json({ success: true, uid, email: decodedToken.email });
@@ -52,11 +53,11 @@ export async function POST(req) {
   }
 }
 
+
 export async function GET(req) {
   const { token } = req.url.searchParams;
 
   try {
-    // Verify token to ensure the user is authenticated
     const decodedToken = await auth.verifyIdToken(token);
     const uid = decodedToken.uid;
 
@@ -68,13 +69,13 @@ export async function GET(req) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
-    // Return user data
     return NextResponse.json({ success: true, data: userDoc.data() });
   } catch (error) {
     console.error("Error fetching user data:", error);
     return NextResponse.json({ error: "Failed to fetch user data" }, { status: 500 });
   }
 }
+
 
 const fetchUserData = async (token) => {
   const res = await fetch("/api/user", {
@@ -93,13 +94,13 @@ const fetchUserData = async (token) => {
   }
 };
 
-const updateUserData = async (token, imageUrl, name, age, gender, country) => {
+const updateUserData = async (token, fileInputCover, fileInputProfile,  fullName, nickName, birthday, strongHand, backhand, country, city) => {
   const res = await fetch("/api/user", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ token, imageUrl, name, age, gender, country })
+    body: JSON.stringify({ token, fileInputCover, fileInputProfile,  fullName, nickName, birthday, strongHand, backhand, country, city })
   });
 
   const data = await res.json();
