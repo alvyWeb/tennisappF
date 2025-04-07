@@ -14,7 +14,7 @@ if (!getApps().length) {
     credential: cert({
       projectId: "atpenn-4fc94",
       clientEmail: "firebase-adminsdk-9hahq@atpenn-4fc94.iam.gserviceaccount.com",
-      privateKey: privateKey?.replace(/\\n/g, '\n')),
+      privateKey: privateKey?.replace(/\\n/g, '\n'),
     }),
   });
 }
