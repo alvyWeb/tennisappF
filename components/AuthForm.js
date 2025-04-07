@@ -53,7 +53,7 @@ export default function UserProfileForm() {
     <div>
       <h2>User Profile</h2>
       <form onSubmit={handleSubmit}>
-        <input type="text" name="image" value={formData.image} onChange={handleChange} placeholder="Image URL" />
+        <input type="file" name="image" value={formData.image} onChange={handleChange} placeholder="Image URL" />
         <input type="text" name="name" value={formData.name} onChange={handleChange} placeholder="Name" />
         <input type="number" name="age" value={formData.age} onChange={handleChange} placeholder="Age" />
         <select name="gender" value={formData.gender} onChange={handleChange}>
