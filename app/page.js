@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import AuthForm from "./AuthForm";
-import UserProfileForm from "./UserProfileForm";
+import AuthForm from "../components/AuthForm";
+import UserProfileForm from "../app/info/page";
 
 export default function MainPage() {
   const [user, setUser] = useState(null);
