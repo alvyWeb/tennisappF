@@ -76,3 +76,37 @@ export async function GET(req) {
   }
 }
 
+const fetchUserData = async (token) => {
+  const res = await fetch("/api/user", {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ token })
+  });
+
+  const data = await res.json();
+  if (data.success) {
+    console.log("User Data:", data.data);
+  } else {
+    console.error("Error fetching data:", data.error);
+  }
+};
+
+const updateUserData = async (token, imageUrl, name, age, gender, country) => {
+  const res = await fetch("/api/user", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ token, imageUrl, name, age, gender, country })
+  });
+
+  const data = await res.json();
+  if (data.success) {
+    console.log("User data updated successfully");
+  } else {
+    console.error("Error updating data:", data.error);
+  }
+};
+
