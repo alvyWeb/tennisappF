@@ -25,17 +25,29 @@ export default function UserProfileForm() {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       if (currentUser) {
         setUser(currentUser);
-
+  
         const docRef = doc(db, "users", currentUser.uid);
         const docSnap = await getDoc(docRef);
         if (docSnap.exists()) {
-          setFormData(docSnap.data());
-          setCoverPreview(docSnap.data().coverImage || "");
-          setPreviewProfile(docSnap.data().profileImage || "");
+          // Set the user data including all fields
+          const userData = docSnap.data();
+          setFormData({
+            fullName: userData.fullName || "",
+            nickName: userData.nickName || "",
+            birthday: userData.birthday || "",
+            country: userData.country || "",
+            city: userData.city || "",
+            strongHand: userData.strongHand || "",
+            backhand: userData.backhand || "",
+            coverImage: userData.coverImage || "",
+            profileImage: userData.profileImage || "",
+          });
+          setCoverPreview(userData.coverImage || "");
+          setPreviewProfile(userData.profileImage || "");
         }
       }
     });
-
+  
     return () => unsubscribe();
   }, []);
 
