@@ -1,64 +1,80 @@
 "use client";
 
-import { useState } from "react";
-import { auth } from "../utils/firebase";
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+import { useEffect, useState } from "react";
+import { auth } from "../firebase";
+import { doc, getDoc, setDoc } from "firebase/firestore";
+import { db } from "../firebase";
+import { onAuthStateChanged } from "firebase/auth";
 
-export default function AuthForm() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [isLogin, setIsLogin] = useState(true);
+export default function UserProfileForm() {
+  const [user, setUser] = useState(null);
+  const [formData, setFormData] = useState({
+    image: "",
+    name: "",
+    age: "",
+    gender: "",
+    country: "",
+  });
 
-  const handleAuth = async (e) => {
+  // Fetch user from auth
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+      if (currentUser) {
+        setUser(currentUser);
+        // Fetch existing data
+        const docRef = doc(db, "users", currentUser.uid);
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+          setFormData(docSnap.data());
+        }
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!user) return alert("Login required");
 
     try {
-      let userCred;
-
-      if (isLogin) {
-        userCred = await signInWithEmailAndPassword(auth, email, password);
-      } else {
-        userCred = await createUserWithEmailAndPassword(auth, email, password);
-      }
-
-      const idToken = await userCred.user.getIdToken();
-
-      // Send the ID token to your API route
-      const res = await fetch("/api/auth", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ token: idToken }),
-      });
-
-      const data = await res.json();
-      console.log("Server response:", data);
+      await setDoc(doc(db, "users", user.uid), formData);
+      alert("Data updated successfully!");
     } catch (err) {
-      console.error(err.message);
+      console.error("Error saving data:", err);
     }
   };
 
   return (
-    <form onSubmit={handleAuth}>
-      <input
-        type="email"
-        placeholder="Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        required
-      />
-      <input
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        required
-      />
-      <button type="submit">{isLogin ? "Login" : "Sign Up"}</button>
-      <p onClick={() => setIsLogin(!isLogin)} style={{ cursor: "pointer" }}>
-        {isLogin ? "Need an account? Sign Up" : "Already have an account? Log In"}
-      </p>
-    </form>
+    <div>
+      <h2>User Profile</h2>
+      <form onSubmit={handleSubmit}>
+        <input type="text" name="image" value={formData.image} onChange={handleChange} placeholder="Image URL" />
+        <input type="text" name="name" value={formData.name} onChange={handleChange} placeholder="Name" />
+        <input type="number" name="age" value={formData.age} onChange={handleChange} placeholder="Age" />
+        <select name="gender" value={formData.gender} onChange={handleChange}>
+          <option value="">Select Gender</option>
+          <option value="Male">Male</option>
+          <option value="Female">Female</option>
+        </select>
+        <input type="text" name="country" value={formData.country} onChange={handleChange} placeholder="Country" />
+        <button type="submit">Save</button>
+      </form>
+
+      {formData.name && (
+        <div style={{ marginTop: "20px" }}>
+          <h3>Profile Info</h3>
+          <img src={formData.image} alt="User" width="100" />
+          <p><strong>Name:</strong> {formData.name}</p>
+          <p><strong>Age:</strong> {formData.age}</p>
+          <p><strong>Gender:</strong> {formData.gender}</p>
+          <p><strong>Country:</strong> {formData.country}</p>
+        </div>
+      )}
+    </div>
   );
 }
