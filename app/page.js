@@ -1,10 +1,19 @@
-import AuthForm from "../components/AuthForm";
+"use client";
 
-export default function Home() {
+import { useState } from "react";
+import AuthForm from "./AuthForm";
+import UserProfileForm from "./UserProfileForm";
+
+export default function MainPage() {
+  const [user, setUser] = useState(null);
+
   return (
-    <main>
-      <h1>Welcome</h1>
-      <AuthForm />
-    </main>
+    <div>
+      {!user ? (
+        <AuthForm onLogin={setUser} />
+      ) : (
+        <UserProfileForm />
+      )}
+    </div>
   );
 }
