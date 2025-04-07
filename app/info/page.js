@@ -168,6 +168,7 @@ export default function UserProfileForm() {
                 name="fullName"
                 type="text"
                 placeholder="הכנס שם..."
+                value={formData.fullName}
               />
             </div>
             <div className="label_input">
@@ -177,6 +178,7 @@ export default function UserProfileForm() {
                 name="nickName"
                 type="text"
                 placeholder="יינתן לך בהמשך..."
+                value={formData.nickName}
               />
             </div>
           </div>
@@ -184,7 +186,7 @@ export default function UserProfileForm() {
           <div className="calender">
             <p>תאריך לידה</p>
             <div className="date_input">
-              <input onChange={handleInput} name="birthday" type="date" />
+              <input onChange={handleInput} name="birthday" type="date" value={formData.birthday}/>
             </div>
           </div>
 
@@ -193,23 +195,23 @@ export default function UserProfileForm() {
               <div className="label_input">
                 <label htmlFor="">מולדת</label>
                 <span>
-                  <input onChange={handleInput} name="country" type="text" />
+                  <input onChange={handleInput} name="country" type="text" value={formData.country}/>
                   <img src="./flags/il.png" alt="" />
                 </span>
               </div>
               <div className="label_input">
                 <label htmlFor="">גובה</label>
-                <input onChange={handleInput} name="city" type="text" />
+                <input onChange={handleInput} name="city" type="text" value={formData.city}/>
               </div>
             </div>
             <div className="country_height">
               <div className="label_input">
                 <label htmlFor="">יד חזקה</label>
-                <input onChange={handleInput} name="strongHand" type="text" />
+                <input onChange={handleInput} name="strongHand" type="text" value={formData.strongHand}/>
               </div>
               <div className="label_input">
                 <label htmlFor="">חבטת גב</label>
-                <input onChange={handleInput} name="backhand" type="text" />
+                <input onChange={handleInput} name="backhand" type="text" value={formData.backhand}/>
               </div>
             </div>
           </div>
