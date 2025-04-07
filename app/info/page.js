@@ -37,7 +37,7 @@ export default function UserDataForm() {
         <div>
           <label htmlFor="image">Image URL:</label>
           <input
-            type="text"
+            type="file"
             id="image"
             value={image}
             onChange={(e) => setImage(e.target.value)}
